@@ -1,0 +1,60 @@
+{
+  "info": {
+    "name": "CipherNotes",
+    "_postman_id": "f1c2e3a4-b5d6-7890-1234-56789abcdef0",
+    "description": "Postman collection for CipherNotes backend testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"mypassword\"\n}"
+        },
+        "url": "{{baseURL}}/api/users/register"
+      }
+    },
+    {
+      "name": "Create Note",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"My First Note\",\n  \"content\": \"This is a note.\",\n  \"userId\": 1\n}"
+        },
+        "url": "{{baseURL}}/api/notes"
+      }
+    },
+    {
+      "name": "Get All Notes",
+      "request": {
+        "method": "GET",
+        "url": "{{baseURL}}/api/notes"
+      }
+    },
+    {
+      "name": "Update Note",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated Note\",\n  \"content\": \"Updated content\"\n}"
+        },
+        "url": "{{baseURL}}/api/notes/1"
+      }
+    },
+    {
+      "name": "Delete Note",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseURL}}/api/notes/1"
+      }
+    }
+  ]
+}
