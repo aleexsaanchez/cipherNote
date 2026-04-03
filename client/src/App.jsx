@@ -1,59 +1,28 @@
-import { useState, useEffect } from "react";
-import { getNotes, createNote } from "./api";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import AuthPage from "./pages/AuthPage";
+import CreateNotePage from "./pages/CreateNotePage";
+import EditNotePage from "./pages/EditNotePage";
+import NotesListPage from "./pages/NotesListPage";
 
 function App() {
-  const [notes, setNotes] = useState([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  // Load notes from backend
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const data = await getNotes();
-      setNotes(data);
-    };
-
-    fetchNotes();
-  }, []);
-
-  const handleAddNote = async () => {
-    const newNote = { title, content };
-
-    const savedNote = await createNote(newNote);
-    setNotes([...notes, savedNote]);
-
-    setTitle("");
-    setContent("");
+  const logout = () => {
+    setToken("");
+    localStorage.removeItem("token");
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>CipherNotes</h1>
-
-      <h2>Create Note</h2>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <br /><br />
-      <textarea
-        placeholder="Content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <br /><br />
-      <button onClick={handleAddNote}>Add Note</button>
-
-      <h2>Your Notes</h2>
-      {notes.map((note) => (
-        <div key={note.id} style={{ border: "1px solid black", margin: "10px", padding: "10px" }}>
-          <h3>{note.title}</h3>
-          <p>{note.content}</p>
-        </div>
-      ))}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/auth" element={<AuthPage setToken={setToken} />} />
+        <Route path="/notes" element={token ? <NotesListPage token={token} /> : <Navigate to="/auth" />} />
+        <Route path="/notes/create" element={token ? <CreateNotePage token={token} /> : <Navigate to="/auth" />} />
+        <Route path="/notes/edit/:id" element={token ? <EditNotePage token={token} /> : <Navigate to="/auth" />} />
+        <Route path="*" element={<Navigate to="/notes" />} />
+      </Routes>
+    </Router>
   );
 }
 

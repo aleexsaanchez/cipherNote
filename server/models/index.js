@@ -1,20 +1,31 @@
-const { Sequelize } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const db = {};
 
 const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite'
+  dialect: 'sqlite',
+  storage: './database.sqlite'
 });
 
-const db = {};
-db.Sequelize = Sequelize;
+fs
+  .readdirSync(__dirname)
+  .filter(file => 
+    file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+  )
+  .forEach(file => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
 db.sequelize = sequelize;
-
-// Models
-db.User = require('./User')(sequelize, Sequelize);
-db.Note = require('./Note')(sequelize, Sequelize);
-
-// Associations
-db.User.hasMany(db.Note, { foreignKey: 'userId' });
-db.Note.belongsTo(db.User, { foreignKey: 'userId' });
+db.Sequelize = Sequelize;
 
 module.exports = db;
