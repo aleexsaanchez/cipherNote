@@ -7,14 +7,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Sync database
-db.sequelize.sync({ alter: true }) // <-- ensures tags & userId columns exist
-  .then(() => console.log("Database connected and synced!"))
-  .catch(err => console.log("Error connecting to DB:", err));
-
 // Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/notes', require('./routes/notes'));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const syncDatabase = (options = { alter: true }) => db.sequelize.sync(options);
+
+if (require.main === module) {
+  syncDatabase()
+    .then(() => {
+      console.log('Database connected and synced!');
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch((err) => console.log('Error connecting to DB:', err));
+}
+
+module.exports = { app, syncDatabase };

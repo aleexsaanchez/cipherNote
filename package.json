@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "npm run test --prefix server && npm run test --prefix client"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
