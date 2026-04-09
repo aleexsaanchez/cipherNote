@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import { getNotes, deleteNote } from "../api";
 import { useNavigate } from "react-router-dom";
-import RichTextContent from "../components/RichTextContent";
-import { stripHtml } from "../utils/richText";
+import { extractPlainText, sanitizeHtml } from "../utils/content";
+
+function NotePreview({ content }) {
+  const sanitizedContent = sanitizeHtml(content || "");
+
+  return (
+    <div
+      className="rich-content rich-content-compact note-preview"
+      dangerouslySetInnerHTML={{
+        __html: sanitizedContent || "<p><em>Nothing to preview yet.</em></p>",
+      }}
+    />
+  );
+}
 
 function NotesListPage({ token }) {
   const [notes, setNotes] = useState([]);
@@ -31,7 +43,7 @@ function NotesListPage({ token }) {
   const filteredNotes = notes.filter(
     (note) =>
       note.title.toLowerCase().includes(search.toLowerCase()) ||
-      stripHtml(note.content).toLowerCase().includes(search.toLowerCase()) ||
+      extractPlainText(note.content).toLowerCase().includes(search.toLowerCase()) ||
       (note.tags && note.tags.join(" ").toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -76,7 +88,7 @@ function NotesListPage({ token }) {
             <div className="note-card-top">
               <h2>{note.title}</h2>
             </div>
-            <RichTextContent content={note.content} compact className="note-preview" />
+            <NotePreview content={note.content} />
             {note.tags && note.tags.length > 0 && (
               <div className="tag-list">
                 {note.tags.map((tag) => (
