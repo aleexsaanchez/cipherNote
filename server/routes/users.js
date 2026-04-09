@@ -4,7 +4,7 @@ const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const SECRET = "secretkey"; // later move to env
+const SECRET = process.env.JWT_SECRET || "secretkey";
 
 // REGISTER
 router.post("/register", async (req, res) => {

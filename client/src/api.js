@@ -1,5 +1,5 @@
 // src/api.js
-const baseURL = "http://localhost:5000/api";
+const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 export const register = async (data) => {
   const res = await fetch(`${baseURL}/users/register`, {

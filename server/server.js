@@ -4,7 +4,12 @@ const cors = require('cors');
 const db = require('./models');
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(',').map(origin => origin.trim()).filter(Boolean)
+  : true;
+
+app.use(cors({ origin: allowedOrigins }));
 app.use(bodyParser.json());
 
 // Routes

@@ -1,6 +1,6 @@
 // routes/authMiddleware.js
 const jwt = require("jsonwebtoken");
-const SECRET = "secretkey"; // move to process.env later for security
+const SECRET = process.env.JWT_SECRET || "secretkey";
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers["authorization"];
