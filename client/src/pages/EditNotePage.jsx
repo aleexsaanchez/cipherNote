@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getNoteById, updateNote } from "../api";
 import { useParams, useNavigate } from "react-router-dom";
+import MarkdownEditor from "../components/MarkdownEditor";
 
 function EditNotePage({ token }) {
   const { id } = useParams();
@@ -38,56 +39,24 @@ function EditNotePage({ token }) {
       <div className="page-hero">
         <p className="eyebrow">Update note</p>
         <h1>Edit Note</h1>
-        <p className="page-subtitle">Refine the title, rewrite the content, or adjust the tags.</p>
+        <p className="page-subtitle">
+          Refine the title, update the formatting, or adjust the tags.
+        </p>
       </div>
 
       <div className="card form-card">
-
-        <div className="form-group">
-          <label className="field-label" htmlFor="title">
-            Title
-          </label>
-          <input
-            id="title"
-            className="input"
-            type="text"
-            placeholder="Short, searchable title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="field-label" htmlFor="content">
-            Content
-          </label>
-          <textarea
-            id="content"
-            className="input"
-            placeholder="Write your note here..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={8}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="field-label" htmlFor="tags">
-            Tags
-          </label>
-          <input
-            id="tags"
-            className="input"
-            type="text"
-            placeholder="Tags (comma separated)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
-        </div>
-
-        <button className="button button-primary button-full" onClick={handleUpdate}>
-          Update Note
-        </button>
+        <MarkdownEditor
+          title={title}
+          setTitle={setTitle}
+          content={content}
+          setContent={setContent}
+          tags={tags}
+          setTags={setTags}
+          onSubmit={handleUpdate}
+          submitLabel="Update Note"
+          titlePlaceholder="Short, searchable title"
+          tagPlaceholder="lab, mitre, cve-2024, blue-team"
+        />
       </div>
     </div>
   );

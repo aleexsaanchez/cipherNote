@@ -271,10 +271,7 @@ button {
 .note-preview {
   margin: 0;
   color: var(--text);
-  line-clamp: 5;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+  max-height: 220px;
   overflow: hidden;
 }
 
@@ -304,9 +301,193 @@ button {
 }
 
 .form-card {
-  width: min(700px, 100%);
+  width: min(1040px, 100%);
   margin: 0 auto;
   padding: 28px;
+}
+
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.editor-form,
+.preview-panel {
+  min-width: 0;
+}
+
+.editor-form {
+  display: grid;
+  gap: 16px;
+}
+
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(10, 18, 31, 0.76);
+  color: var(--text-strong);
+  border: 1px solid var(--border);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.toolbar-button:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 24, 39, 0.95);
+  border-color: var(--border-strong);
+}
+
+.editor-hint {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.preview-panel {
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(4, 10, 16, 0.72);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.preview-header {
+  margin-bottom: 14px;
+}
+
+.preview-header h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+}
+
+.rich-content {
+  display: grid;
+  gap: 0.9rem;
+  color: var(--text);
+}
+
+.rich-content > * {
+  margin: 0;
+}
+
+.rich-content h1,
+.rich-content h2,
+.rich-content h3,
+.rich-content h4,
+.rich-content h5,
+.rich-content h6 {
+  color: var(--text-strong);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.rich-content h1 {
+  font-size: 1.65rem;
+}
+
+.rich-content h2 {
+  font-size: 1.35rem;
+}
+
+.rich-content h3 {
+  font-size: 1.12rem;
+}
+
+.rich-content p,
+.rich-content li {
+  line-height: 1.7;
+}
+
+.rich-content ul,
+.rich-content ol {
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.rich-content blockquote {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: rgba(34, 211, 238, 0.08);
+  color: #d9f8ff;
+}
+
+.rich-content pre {
+  margin: 0;
+  padding: 14px;
+  overflow: auto;
+  border-radius: 16px;
+  background: #02070c;
+  border: 1px solid var(--border);
+}
+
+.rich-content code {
+  font-family: "IBM Plex Mono", monospace;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.35rem;
+  border-radius: 8px;
+}
+
+.rich-content pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.rich-content hr {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.rich-content a {
+  color: var(--accent-hover);
+}
+
+.rich-content-compact {
+  font-size: 0.95rem;
+  gap: 0.6rem;
+  max-height: 220px;
+  overflow: hidden;
+}
+
+.rich-content-compact h1 {
+  font-size: 1.2rem;
+}
+
+.rich-content-compact h2 {
+  font-size: 1.08rem;
+}
+
+.rich-content-compact pre {
+  padding: 10px;
+}
+
+.note-card .rich-content {
+  max-height: 210px;
+  overflow: hidden;
 }
 
 .field-label {
@@ -490,6 +671,151 @@ textarea.input {
   color: var(--muted);
 }
 
+.tiptap-editor-wrapper {
+  position: relative;
+}
+
+.tiptap-editor {
+  background: transparent;
+}
+
+.tiptap-editor .ProseMirror {
+  min-height: 320px;
+  padding: 18px 16px;
+  border-radius: 16px;
+  outline: none;
+  overflow: auto;
+  white-space: normal;
+  border: 1px solid rgba(126, 171, 255, 0.18);
+  background: rgba(7, 14, 23, 0.88);
+  color: var(--text-strong);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+.tiptap-editor .ProseMirror:focus {
+  border-color: rgba(34, 211, 238, 0.52);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.tiptap-editor .ProseMirror.ProseMirror {
+  outline: none;
+}
+
+.tiptap-editor .ProseMirror p {
+  margin: 0.5rem 0;
+}
+
+.tiptap-editor .ProseMirror h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+  color: var(--text-strong);
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.tiptap-editor .ProseMirror h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+  color: var(--text-strong);
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.tiptap-editor .ProseMirror h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin: 0.8rem 0 0.4rem;
+  color: var(--text-strong);
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.tiptap-editor .ProseMirror ul,
+.tiptap-editor .ProseMirror ol {
+  margin: 0.5rem 0;
+  padding-left: 1.35rem;
+}
+
+.tiptap-editor .ProseMirror li {
+  line-height: 1.7;
+  margin: 0.2rem 0;
+}
+
+.tiptap-editor .ProseMirror blockquote {
+  margin: 0.5rem 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: rgba(34, 211, 238, 0.08);
+  color: #d9f8ff;
+}
+
+.tiptap-editor .ProseMirror pre {
+  margin: 0.5rem 0;
+  padding: 14px;
+  overflow: auto;
+  border-radius: 16px;
+  background: #02070c;
+  border: 1px solid var(--border);
+}
+
+.tiptap-editor .ProseMirror code {
+  font-family: "IBM Plex Mono", monospace;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.35rem;
+  border-radius: 8px;
+  font-size: 0.95em;
+}
+
+.tiptap-editor .ProseMirror pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.tiptap-editor .ProseMirror hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1rem 0;
+  padding: 0;
+}
+
+.tiptap-editor .ProseMirror a {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.tiptap-editor .ProseMirror strong {
+  font-weight: 600;
+}
+
+.tiptap-editor .ProseMirror em {
+  font-style: italic;
+}
+
+.tiptap-editor .ProseMirror u {
+  text-decoration: underline;
+}
+
+/* Toolbar active state */
+.toolbar-button.is-active {
+  background: rgba(34, 211, 238, 0.24);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.toolbar-button.is-active:hover {
+  background: rgba(34, 211, 238, 0.32);
+}
+
 @media (max-width: 920px) {
   .auth-shell {
     grid-template-columns: 1fr;
@@ -526,6 +852,10 @@ textarea.input {
   .form-card {
     padding: 20px;
     border-radius: 22px;
+  }
+
+  .preview-panel {
+    padding: 16px;
   }
 
   .page-hero h1,

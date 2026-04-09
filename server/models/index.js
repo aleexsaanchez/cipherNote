@@ -3,10 +3,11 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const db = {};
+const storage = process.env.SQLITE_STORAGE || './database.sqlite';
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: './database.sqlite'
+  storage
 });
 
 fs

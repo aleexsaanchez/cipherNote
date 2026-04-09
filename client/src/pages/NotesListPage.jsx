@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { getNotes, deleteNote } from "../api";
 import { useNavigate } from "react-router-dom";
+import RichTextContent from "../components/RichTextContent";
+import { stripHtml } from "../utils/richText";
 
 function NotesListPage({ token }) {
   const [notes, setNotes] = useState([]);
@@ -29,7 +31,7 @@ function NotesListPage({ token }) {
   const filteredNotes = notes.filter(
     (note) =>
       note.title.toLowerCase().includes(search.toLowerCase()) ||
-      note.content.toLowerCase().includes(search.toLowerCase()) ||
+      stripHtml(note.content).toLowerCase().includes(search.toLowerCase()) ||
       (note.tags && note.tags.join(" ").toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -74,7 +76,7 @@ function NotesListPage({ token }) {
             <div className="note-card-top">
               <h2>{note.title}</h2>
             </div>
-            <p className="note-preview">{note.content}</p>
+            <RichTextContent content={note.content} compact className="note-preview" />
             {note.tags && note.tags.length > 0 && (
               <div className="tag-list">
                 {note.tags.map((tag) => (
