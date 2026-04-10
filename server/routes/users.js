@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const SECRET = process.env.JWT_SECRET || "secretkey";
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
 // REGISTER
 router.post("/register", async (req, res) => {
@@ -62,7 +63,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: JWT_EXPIRES_IN });
 
     res.json({ message: "Login successful", token });
   } catch (err) {
