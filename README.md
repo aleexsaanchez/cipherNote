@@ -88,23 +88,23 @@ All notes routes require a bearer token in the `Authorization` header.
 
 ## Screenshots
 
-Add the screenshots below to the repository if you want them embedded in the README:
+The screenshots below are included in the repository and render inline:
 
-- `client/public/screenshots/auth-page.png` - auth page with login and register layouts
-- `client/public/screenshots/notes-empty.png` - notes list page with the empty state
-- `client/public/screenshots/create-note.png` - create note page with the rich text editor
-- `client/public/screenshots/notes-saved.png` - notes list page after saving a note
+### Auth Page
 
-Suggested placement in the project:
+![Auth page](client/public/screenshots/auth-page.png)
 
-- `client/public/screenshots/`
+### Notes List Empty State
 
-The screenshots you provided already match the core assignment flow:
+![Notes list empty state](client/public/screenshots/notes-empty.png)
 
-- Notes list page with the empty state
-- Create note page with the rich text editor
-- Notes list page after saving a note
-- Auth page with login and register layouts
+### Create Note Page
+
+![Create note page](client/public/screenshots/create-note.png)
+
+### Notes List With Saved Note
+
+![Notes list with saved note](client/public/screenshots/notes-saved.png)
 
 ## Tests
 
