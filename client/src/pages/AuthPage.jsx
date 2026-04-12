@@ -15,9 +15,17 @@ function AuthPage({ setToken }) {
     setError("");
 
     try {
-      const res = isRegister
-        ? await register({ email, password })
-        : await login({ email, password });
+      let res;
+
+      if (isRegister) {
+        const registerRes = await register({ email, password });
+        if (registerRes.error || registerRes.message === "User already exists") {
+          throw new Error(registerRes.message || "Registration failed");
+        }
+        res = await login({ email, password });
+      } else {
+        res = await login({ email, password });
+      }
 
       if (!res.token) {
         throw new Error(res.message || "Authentication failed");

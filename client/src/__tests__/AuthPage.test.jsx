@@ -57,7 +57,8 @@ describe("AuthPage component", () => {
 
   test("switches to register mode and submits register request", async () => {
     const setToken = jest.fn();
-    register.mockResolvedValue({ token: "register-token" });
+    register.mockResolvedValue({ message: "User created!" });
+    login.mockResolvedValue({ token: "register-token" });
 
     render(
       <MemoryRouter>
@@ -73,6 +74,13 @@ describe("AuthPage component", () => {
 
     await waitFor(() => {
       expect(register).toHaveBeenCalledWith({
+        email: "new@example.com",
+        password: "newpass123"
+      });
+    });
+
+    await waitFor(() => {
+      expect(login).toHaveBeenCalledWith({
         email: "new@example.com",
         password: "newpass123"
       });
