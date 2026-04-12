@@ -1,47 +1,31 @@
-# CipherNotes
+# CipherNote
 
-CipherNotes is a web application that allows users to create and manage personal notes.
+CipherNote is a full-stack note-taking app for cybersecurity study notes. It lets users register, sign in, and manage structured notes with rich text formatting, tags, search, edit, and delete actions.
 
-## Frontend Setup
-cd client
-npm install
-npm run dev
+## Project Overview
 
-## Backend Setup
-cd server
-npm install
-npm start
+The app is designed to keep lab findings, tactics, hardening steps, and reference material in one organized workspace. Notes support formatted content so users can store more than plain text and still browse entries quickly from the notes list.
 
-## Render Deployment
+## Technologies Used
 
-Use two services on Render: one web service for the API and one static site for the client.
+- Frontend: React, Vite, React Router, TipTap
+- Backend: Node.js, Express, Sequelize, SQLite, JWT, bcrypt
+- Testing: Jest, React Testing Library, Supertest
+- Deployment: Render for the API, Vercel for the frontend
 
-### API service environment variables
+## Live Deployment
 
-- `JWT_SECRET`: required in production for signing auth tokens
-- `PORT`: Render provides this automatically, but local overrides are fine
-- `SQLITE_STORAGE`: optional path for persistent SQLite storage; use a mounted disk if you keep SQLite
-- `CLIENT_ORIGIN`: comma-separated frontend origins allowed by CORS
+- Frontend: https://cipher-note-nine.vercel.app
+- Backend API: https://ciphernote-7z4s.onrender.com/api
 
-### Client environment variables
+## Local Setup
 
-- `VITE_API_BASE_URL`: full API base URL, for example `https://your-api.onrender.com/api`
+### Prerequisites
 
-### Deployment notes
+- Node.js 20+
+- npm
 
-- Keep SQLite only if you have persistent disk storage configured.
-- If you do not want to manage storage, move the backend to a managed database before production.
-- Run the backend tests, client tests, and client build before promoting the deploy.
-
-## Testing Guide
-
-This project uses Jest for all tests:
-
-- Unit tests for core backend logic
-- Integration tests for API endpoints
-- React Testing Library tests for important frontend interactions
-
-### 1) Install dependencies
+### Install dependencies
 
 From the project root:
 
@@ -50,55 +34,109 @@ npm install --prefix server
 npm install --prefix client
 ```
 
-### 2) Run backend tests
+### Run the backend locally
+
+```bash
+cd server
+npm start
+```
+
+### Run the frontend locally
+
+```bash
+cd client
+npm run dev
+```
+
+### Environment variables
+
+Backend on Render:
+
+- `JWT_SECRET` - secret used to sign auth tokens
+- `JWT_EXPIRES_IN` - token lifetime, for example `24h`
+- `NODE_ENV` - `production`
+- `NODE_VERSION` - `20`
+- `CLIENT_ORIGIN` - your Vercel frontend URL
+- `SQLITE_STORAGE` - `./database.sqlite` for the free-tier fallback used in this project
+
+Frontend on Vercel:
+
+- `VITE_API_BASE_URL` - full API base URL, for example `https://ciphernote-7z4s.onrender.com/api`
+
+## API Endpoints
+
+Base path: `/api`
+
+### Auth
+
+- `POST /users/register` - create a new user
+- `POST /users/login` - log in and receive a JWT token
+
+### Notes
+
+All notes routes require a bearer token in the `Authorization` header.
+
+- `GET /notes` - list the current user’s notes
+- `GET /notes/:id` - get a single note by id
+- `POST /notes` - create a new note
+- `PUT /notes/:id` - update an existing note
+- `DELETE /notes/:id` - delete a note
+
+### Users
+
+- `GET /users/all` - test/helper route that returns users without passwords
+
+## Screenshots
+
+Add the screenshots below to the repository if you want them embedded in the README:
+
+- `client/public/screenshots/auth-page.png` - auth page with login and register layouts
+- `client/public/screenshots/notes-empty.png` - notes list page with the empty state
+- `client/public/screenshots/create-note.png` - create note page with the rich text editor
+- `client/public/screenshots/notes-saved.png` - notes list page after saving a note
+
+Suggested placement in the project:
+
+- `client/public/screenshots/`
+
+The screenshots you provided already match the core assignment flow:
+
+- Notes list page with the empty state
+- Create note page with the rich text editor
+- Notes list page after saving a note
+- Auth page with login and register layouts
+
+## Tests
+
+Run the test suites from the project root:
 
 ```bash
 npm test --prefix server
-```
-
-What is covered:
-
-- `authMiddleware` unit tests:
-	- Missing token returns `401`
-	- Malformed or invalid token returns `401`
-	- Valid token sets `req.userId` and calls `next`
-- API integration tests:
-	- Register success + duplicate user (`409`)
-	- Login success + invalid login (`401`)
-	- Protected route without token (`401`)
-	- Notes CRUD flow (create, list, get by id, update, delete)
-	- Missing note returns `404`
-
-### 3) Run frontend tests
-
-```bash
 npm test --prefix client
 ```
 
-What is covered:
+The existing automated coverage includes backend auth and API behavior, plus frontend auth, notes list, and header interactions.
 
-- `AuthPage`:
-	- Login submit flow
-	- Register mode toggle and submit flow
-	- Error message rendering when auth fails
-- `Header`:
-	- Logout visibility based on auth state
-	- Logout action triggers callback and navigation
-- `NotesListPage`:
-	- Notes rendering and search filtering
-	- Empty state rendering
-	- Delete interaction
+## Deployment Notes
 
-### 4) Run full suite
+- Render hosts the backend API.
+- Vercel hosts the frontend.
+- The frontend reads the backend URL from `VITE_API_BASE_URL`.
+- The backend allows the frontend origin through `CLIENT_ORIGIN`.
+- This project uses SQLite, so production storage depends on the Render runtime configuration used for this assignment.
 
-```bash
-npm test
-```
+## Manual Verification
 
-### Notes on current coverage
+Before submitting, verify the production flow end-to-end:
 
-- Covered: critical auth, protected API behavior, note CRUD paths, and key UI interactions.
-- Not covered yet:
-	- Frontend API utility module (`client/src/api.js`) request error edge cases
-	- Visual styling/CSS regression tests
-	- End-to-end browser flows (for that, consider Playwright or Cypress)
+1. Open the Vercel frontend.
+2. Register a new user.
+3. Confirm the app loads notes immediately after registration.
+4. Create a note and refresh the page.
+5. Confirm the note still appears.
+6. Log out and log back in.
+
+## Notes on Coverage
+
+- Covered: authentication, note CRUD, protected routes, notes list rendering, and the register auto-login flow.
+- Not added yet: browser automation tests such as Playwright or Cypress.
