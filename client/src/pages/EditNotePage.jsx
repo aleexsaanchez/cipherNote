@@ -9,18 +9,32 @@ function EditNotePage({ token }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchNote = async () => {
-      const note = await getNoteById(id, token);
-      setTitle(note.title);
-      setContent(note.content);
-      setTags(note.tags ? note.tags.join(", ") : "");
+      setError("");
+      setIsLoading(true);
+      try {
+        const note = await getNoteById(id, token);
+        setTitle(note.title);
+        setContent(note.content);
+        setTags(note.tags ? note.tags.join(", ") : "");
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Failed to load note");
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchNote();
   }, [id, token]);
 
   const handleUpdate = async () => {
+    setError("");
+    setIsSubmitting(true);
     try {
       const tagsArray = tags
         .split(",")
@@ -30,7 +44,9 @@ function EditNotePage({ token }) {
       navigate("/notes");
     } catch (err) {
       console.error(err);
-      alert("Failed to update note");
+      setError(err.message || "Failed to update note");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -45,6 +61,13 @@ function EditNotePage({ token }) {
       </div>
 
       <div className="card form-card">
+        {error && (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        )}
+        {isLoading && <p className="notes-meta">Loading note...</p>}
+        {!isLoading && isSubmitting && <p className="notes-meta">Updating note...</p>}
         <MarkdownEditor
           title={title}
           setTitle={setTitle}
@@ -53,7 +76,8 @@ function EditNotePage({ token }) {
           tags={tags}
           setTags={setTags}
           onSubmit={handleUpdate}
-          submitLabel="Update Note"
+          submitLabel={isSubmitting ? "Updating..." : "Update Note"}
+          submitDisabled={isLoading || isSubmitting}
           titlePlaceholder="Short, searchable title"
           tagPlaceholder="lab, mitre, cve-2024, blue-team"
         />

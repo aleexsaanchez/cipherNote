@@ -27,6 +27,7 @@ function MarkdownEditor({
   setTags,
   onSubmit,
   submitLabel,
+  submitDisabled = false,
   titlePlaceholder = "Short, searchable title",
   tagPlaceholder = "Ideas, work, personal",
 }) {
@@ -191,7 +192,7 @@ function MarkdownEditor({
           />
         </div>
 
-        <button className="button button-primary button-full" type="submit">
+        <button className="button button-primary button-full" type="submit" disabled={submitDisabled}>
           {submitLabel}
         </button>
       </form>

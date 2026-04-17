@@ -25,6 +25,19 @@ describe("NotesListPage component", () => {
     window.confirm = jest.fn(() => true);
   });
 
+  test("shows loading and API error state when notes fetch fails", async () => {
+    getNotes.mockRejectedValue(new Error("Notes unavailable"));
+
+    render(
+      <MemoryRouter>
+        <NotesListPage token="token-123" />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Loading notes...")).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toHaveTextContent("Notes unavailable");
+  });
+
   test("loads notes and filters by search query", async () => {
     getNotes.mockResolvedValue([
       { id: 1, title: "Network Scan", content: "nmap notes", tags: ["recon"] },

@@ -19,24 +19,40 @@ function NotePreview({ content }) {
 function NotesListPage({ token }) {
   const [notes, setNotes] = useState([]);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const allNotes = await getNotes(token);
-      setNotes(allNotes);
+      setError("");
+      setIsLoading(true);
+      try {
+        const allNotes = await getNotes(token);
+        setNotes(allNotes);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Failed to load notes");
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchNotes();
   }, [token]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
+    setError("");
+    setIsDeleting(true);
     try {
       await deleteNote(id, token);
       setNotes((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Failed to delete note");
+      setError(err.message || "Failed to delete note");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -78,7 +94,15 @@ function NotesListPage({ token }) {
         {filteredNotes.length} note{filteredNotes.length === 1 ? "" : "s"}
       </div>
 
-      {filteredNotes.length === 0 && (
+      {isLoading && <p className="notes-meta">Loading notes...</p>}
+      {isDeleting && !isLoading && <p className="notes-meta">Deleting note...</p>}
+      {error && (
+        <p className="form-error" role="alert">
+          {error}
+        </p>
+      )}
+
+      {!isLoading && filteredNotes.length === 0 && (
         <p className="empty-state">No notes found. Try a different search or create a new one.</p>
       )}
 
