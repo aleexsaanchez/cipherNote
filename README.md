@@ -82,10 +82,6 @@ All notes routes require a bearer token in the `Authorization` header.
 - `PUT /notes/:id` - update an existing note
 - `DELETE /notes/:id` - delete a note
 
-### Users
-
-- `GET /users/all` - test/helper route that returns users without passwords
-
 ## Screenshots
 
 The screenshots below are included in the repository and render inline:
